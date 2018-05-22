@@ -7,7 +7,7 @@ from douyin_app.docs.conf import HEADER
 
 
 class VideoDownloadSpider(Spider):
-    name = "video_download"
+    name = "single_douyin_video"
     video_url = ''
     download_url = 'https://api.amemv.com/aweme/v1/play/?video_id={}&line=1&ratio=720p&media_type=4&vr_type=0&test_cdn=None&improve_bitrate=0'
 
