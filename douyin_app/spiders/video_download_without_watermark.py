@@ -27,16 +27,15 @@ class VideoDownloadSpider(Spider):
 
     def get_uri(self, response):
         response_content = response.body.decode('utf-8')
-        print(response_content)
         try:
             content = re.findall(r'data = \[(.*)?\];', response_content)[0]
         except Exception:
             content = ''
-            print('解析不到视频信息,,Ծ‸Ծ,,')
+            self.logger.error('解析不到视频信息,,Ծ‸Ծ,,')
         if content:
             json_data = json.loads(content)
             uri = json_data.get('video').get('play_addr').get('uri')
-            print('解析到视频参数{}(•‾̑⌣‾̑•)✧˖°', format(uri))
+            self.logger.info('解析到视频参数{}(•‾̑⌣‾̑•)✧˖°', format(uri))
             video_desc = json_data.get('desc')[0:10]
             yield self.start_get_video(uri=uri, desc=video_desc)
 
@@ -45,4 +44,4 @@ class VideoDownloadSpider(Spider):
         content = response.body
         with open('./douyin_app/videos/{}.mp4'.format(desc), 'wb') as f:
             f.write(content)
-        print('下载完成๑乛◡乛๑')
+        self.logger.info('下载完成๑乛◡乛๑')
