@@ -6,13 +6,13 @@ from scrapy.http import Request
 from douyin_app.docs.conf import HEADER
 
 
-class VideoDownloadSpider(Spider):
-    name = "single_douyin_video"
+class DouyinSpecifiedVideoSpider(Spider):
+    name = "specified_douyin_video"
     video_url = ''
     download_url = 'https://api.amemv.com/aweme/v1/play/?video_id={}&line=1&ratio=720p&media_type=4&vr_type=0&test_cdn=None&improve_bitrate=0'
 
     def __init__(self, url):
-        super(VideoDownloadSpider, self).__init__()
+        super(DouyinSpecifiedVideoSpider, self).__init__()
         self.video_url = url
 
     def start_requests(self):
