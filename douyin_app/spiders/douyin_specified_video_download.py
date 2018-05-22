@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+分享页改版,无法获得参数
+"""
 import re
 import json
 from scrapy import Spider
