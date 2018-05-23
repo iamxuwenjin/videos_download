@@ -20,8 +20,10 @@ class calcSig(object):
         return p.lower()
 
     # 生成 as和cp字段
-    def ppp(self, u_md5, u_key1, u_key2):
-        ascp = [0] * 36
+    def get_as_cp(self, u_md5, u_key1, u_key2):
+        ascp = list()
+        for i in range(36):
+            ascp.append(0)
         ascp[0] = 'a'
         ascp[1] = '1'
         for i in range(0, 8):
@@ -39,7 +41,7 @@ class calcSig(object):
         param_index = url.find('?')
         param = url[param_index + 1:]
         param_list = param.split('&')
-        param_list.append('rstr=' + self.rstr)
+        param_list.append('rstr='+self.rstr)
         param_list = sorted(param_list)
         result = ''
         for a in param_list:
@@ -64,17 +66,13 @@ class calcSig(object):
         hexTime = hex(curtime)[2:]
         aa = self.shuffle(hexTime, self.key1)
         bb = self.shuffle(hexTime, self.key2)
-        sig = self.ppp(p_md5, aa, bb)
-        return ('%s&as=%s&cp=%s' % (url, sig[:18], sig[18:]))
+        sig = self.get_as_cp(p_md5, aa, bb)
+        return '%s&as=%s&cp=%s' % (url, sig[:18], sig[18:])
         # return (sig[:18], sig[18:])
 
 
-def main():
+if __name__ == "__main__":
     c = calcSig()
     url = '/aweme/v1/comment/list/?aweme_id=6506468984865426696&cursor=0&count=20&comment_style=2&ts=1516946960&app_type=normal&os_api=23&device_type=HUAWEI NXT-AL10&device_platform=android&ssmix=a&iid=22634572655&manifest_version_code=166&dpi=480&uuid=863336037384660&version_code=166&app_name=aweme&version_name=1.6.6&openudid=3f4f9a09bd6ea55e&device_id=46408460323&resolution=1080*1812&os_version=6.0&language=zh&device_brand=HUAWEI&ac=wifi&update_version_code=1662&aid=1128&channel=aweGW&_rticket=1516946961275'
     t = 1516946961
     print(c.work(url, t))
-
-
-if __name__ == "__main__":
-    main()
