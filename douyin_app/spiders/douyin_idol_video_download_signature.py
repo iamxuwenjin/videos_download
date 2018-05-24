@@ -1,25 +1,26 @@
 # -*- coding: utf-8 -*-
 """
-无签名版本
+签名版本
 """
 import re
 import json
 from scrapy import Spider
 from scrapy.http import Request
 from douyin_app.docs.conf import HEADER
+from douyin_app.docs.generate_douyin_url import generate_douyin_url
 
 
-class DouyinIdolVideoSpider(Spider):
-    name = "idol_douyin_video"
+class DouyinIdolVideoSingnatureSpider(Spider):
+    name = "idol_douyin_video_signature"
 
     idol_url = ''
-    video_list_url = 'https://api.amemv.com/aweme/v1/aweme/post/?user_id={}&max_cursor={}&count=20&device_id=39681429254&ac=wifi&channel=xiaomi&aid=1128&app_name=aweme'
+    video_list_url = 'https://api.amemv.com/aweme/v1/aweme/post/?user_id={}&max_cursor={}&count=20&device_id=52631507626&install_id=33091439731&uuid=0dbb1f1b401d727&openuuid=fbce275cfb9a3fc'
 
     max_cursor = 0
     uid = None
 
     def __init__(self, url):
-        super(DouyinIdolVideoSpider, self).__init__()
+        super(DouyinIdolVideoSingnatureSpider, self).__init__()
         self.idol_url = url
 
     def start_requests(self):
@@ -31,7 +32,7 @@ class DouyinIdolVideoSpider(Spider):
             self.logger.error('解析不到视频信息,,Ծ‸Ծ,,')
 
     def start_get_video_list(self, uid):
-        url = self.video_list_url.format(uid, self.max_cursor)
+        url = generate_douyin_url(self.video_list_url.format(uid, self.max_cursor))
         header = HEADER
         return Request(url=url, headers=header, callback=self.get_video_list)
 
@@ -48,7 +49,7 @@ class DouyinIdolVideoSpider(Spider):
             for video in video_list:
                 download_url = video.get('video').get('play_addr_lowbr').get('url_list')[0]
                 desc = video.get('desc')
-                self.logger.info('解析到下载链接()(•‾̑⌣‾̑•)✧˖°', format(download_url))
+                self.logger.info('(•‾̑⌣‾̑•)✧˖°解析到下载链接{}'.format(download_url))
                 yield self.start_get_video(download_url, desc)
         if content.get('has_more'):
             self.max_cursor = content.get('max_cursor')
